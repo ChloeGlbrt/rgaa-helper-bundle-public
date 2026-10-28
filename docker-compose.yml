@@ -1,0 +1,18 @@
+services:
+  rgaa-helper:
+    image: ghcr.io/chloeglbrt/rgaa-helper:portable-latest
+    pull_policy: always
+    environment:
+      RGAA_API_TOKENS: ${RGAA_API_TOKENS:?Lancer start.bat ou start.sh pour creer le fichier .env}
+      RGAA_ALLOWED_HOSTS: ${RGAA_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      SPRING_PROFILES_ACTIVE: local
+    ports:
+      # Accessible depuis cet ordinateur uniquement.
+      - "127.0.0.1:38080:38080"
+    volumes:
+      - rgaa-data:/app/rgaa-data
+    restart: unless-stopped
+
+volumes:
+  rgaa-data:
+

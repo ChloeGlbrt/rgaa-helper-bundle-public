@@ -1,0 +1,4 @@
+# Secrets locaux : seul le modèle .env.example est partagé.
+.env
+.idea/
+
