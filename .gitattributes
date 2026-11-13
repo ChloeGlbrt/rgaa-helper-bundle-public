@@ -1,3 +1,7 @@
 # start.bat doit garder des fins de ligne Windows (CRLF) : avec LF, cmd.exe peut mal trouver les étiquettes.
 *.bat text eol=crlf
 *.sh text eol=lf
+
+# Fichiers du dépôt, inutiles aux utilisateurs : exclus du zip des releases (git archive / « Download ZIP »).
+.gitignore export-ignore
+.gitattributes export-ignore
