@@ -1,0 +1,3 @@
+# start.bat doit garder des fins de ligne Windows (CRLF) : avec LF, cmd.exe peut mal trouver les étiquettes.
+*.bat text eol=crlf
+*.sh text eol=lf

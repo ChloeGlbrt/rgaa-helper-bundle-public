@@ -7,8 +7,8 @@ services:
       RGAA_ALLOWED_HOSTS: ${RGAA_ALLOWED_HOSTS:-localhost,127.0.0.1}
       SPRING_PROFILES_ACTIVE: local
     ports:
-      # Accessible depuis cet ordinateur uniquement.
-      - "127.0.0.1:38080:38080"
+      # Par défaut, accessible depuis cet ordinateur uniquement (RGAA_BIND_ADDRESS dans .env pour changer).
+      - "${RGAA_BIND_ADDRESS:-127.0.0.1}:38080:38080"
     volumes:
       - rgaa-data:/app/rgaa-data
     restart: unless-stopped
