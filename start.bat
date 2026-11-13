@@ -71,6 +71,8 @@ set "TOKEN="
 for /f "tokens=2 delims==" %%t in ('findstr /b "RGAA_API_TOKENS=" .env') do if not defined TOKEN set "TOKEN=%%t"
 set "BIND="
 for /f "tokens=2 delims==" %%b in ('findstr /b "RGAA_BIND_ADDRESS=" .env') do if not defined BIND set "BIND=%%b"
+set "HOSTS="
+for /f "tokens=2 delims==" %%h in ('findstr /b "RGAA_ALLOWED_HOSTS=" .env') do if not defined HOSTS set "HOSTS=%%h"
 
 echo.
 echo ========================================
@@ -79,6 +81,14 @@ echo  Adresse : http://localhost:38080
 if defined BIND if not "%BIND%"=="127.0.0.1" echo            http://ADRESSE-IP-DE-CETTE-MACHINE:38080 depuis une autre machine
 echo  Jeton   : %TOKEN%
 echo ========================================
+echo.
+echo  Sites autorises : %HOSTS%
+echo  Pour analyser un autre site, ajouter son adresse - sans https://, separee par une virgule -
+echo  a la ligne RGAA_ALLOWED_HOSTS du fichier :
+echo    %CD%\.env
+echo  Pour l'ouvrir : notepad "%CD%\.env"
+echo  puis relancer ce script.
+echo.
 echo  Arret : %COMPOSE% down
 echo.
 pause
