@@ -75,4 +75,14 @@ if [ -n "$bind" ] && [ "$bind" != 127.0.0.1 ]; then
 fi
 echo " Jeton   : $token"
 echo "========================================"
+echo
+echo " Sites autorisés : $(sed -n 's/^RGAA_ALLOWED_HOSTS=//p' .env | head -n 1 | sed 's/,/, /g')"
+echo " Pour analyser un autre site, ajouter son adresse (sans https://, séparée par une virgule)"
+echo " à la ligne RGAA_ALLOWED_HOSTS du fichier :"
+echo "   $PWD/.env"
+if [ "$(uname -s)" = Darwin ]; then
+    echo " (pour l'ouvrir : open -e \"$PWD/.env\")"
+fi
+echo " puis relancer ce script."
+echo
 echo " Arrêt : ${compose[*]} down"
