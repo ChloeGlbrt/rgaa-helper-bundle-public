@@ -35,9 +35,8 @@ pages:
   - /
 ```
 
-Le site doit d'abord être autorisé : ouvrir le fichier **`sites-autorises.txt`** (dans le dossier du bundle),
-ajouter son adresse sur une nouvelle ligne (sans `https://`, `*.monsite.fr` pour tous les sous-domaines),
-enregistrer, puis relancer `start.bat` / `start.sh`. Le script rappelle cette consigne à chaque lancement.
+Tous les sites peuvent être analysés, sans réglage. Pour limiter l'outil à certains sites (tableau de bord ouvert
+sur le réseau), voir `RGAA_ALLOWED_HOSTS` dans `.env.example`.
 
 ## Jetons
 
