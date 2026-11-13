@@ -55,12 +55,6 @@ if [ ! -f .env ]; then
     awk -v t="$token" '/^RGAA_API_TOKENS=/ { print "RGAA_API_TOKENS=" t; next } { print }' .env.example > .env
 fi
 
-# Sites autorisés : sites-autorises.txt (un par ligne), plus RGAA_ALLOWED_HOSTS d'un ancien .env s'il y en a un.
-# Les https://, chemins, espaces et commentaires sont retirés, pour accepter une adresse copiée du navigateur.
-hosts="$( { [ -f sites-autorises.txt ] && cat sites-autorises.txt; echo; sed -n 's/^RGAA_ALLOWED_HOSTS=//p' .env | tr ',' '\n'; } \
-    | sed -E 's/#.*//; s/[[:space:]]//g; s#^[A-Za-z]+://##; s#/.*##' | awk 'NF && !seen[$0]++' | paste -sd, -)"
-export RGAA_ALLOWED_HOSTS="${hosts:=localhost,127.0.0.1}"
-
 "${compose[@]}" up -d
 
 token="$(sed -n 's/^RGAA_API_TOKENS=//p' .env | head -n 1 | cut -d, -f1)"
@@ -81,13 +75,10 @@ if [ -n "$bind" ] && [ "$bind" != 127.0.0.1 ]; then
 fi
 echo " Jeton   : $token"
 echo "========================================"
-echo
-echo " Sites autorisés : ${hosts//,/, }"
-echo " Pour analyser un autre site, ajouter son adresse (une par ligne, sans https://) dans le fichier :"
-echo "   $PWD/sites-autorises.txt"
-if [ "$(uname -s)" = Darwin ]; then
-    echo " (pour l'ouvrir : open -e \"$PWD/sites-autorises.txt\")"
+hosts="$(sed -n 's/^RGAA_ALLOWED_HOSTS=//p' .env | head -n 1)"
+if [ -n "$hosts" ] && [ "$hosts" != "*" ]; then
+    # .env créé avant la 1.0.2 : la liste limite encore les sites analysables.
+    echo " Sites limités à : ${hosts//,/, }"
+    echo " Pour autoriser tous les sites, supprimer la ligne RGAA_ALLOWED_HOSTS de $PWD/.env, puis relancer ce script."
 fi
-echo " Enregistrer, puis relancer ce script."
-echo
 echo " Arrêt : ${compose[*]} down"

@@ -60,13 +60,6 @@ exit /b 1
 :compose_pret
 if not exist .env call :creer_env
 
-rem Sites autorises : sites-autorises.txt, un par ligne, plus RGAA_ALLOWED_HOSTS d'un ancien .env s'il y en a un.
-set "HOSTS="
-if exist sites-autorises.txt for /f "usebackq eol=# tokens=1" %%h in ("sites-autorises.txt") do call :ajouter_site "%%h"
-for /f "tokens=2 delims==" %%a in ('findstr /b "RGAA_ALLOWED_HOSTS=" .env') do call :ajouter_liste "%%a"
-if not defined HOSTS set "HOSTS=localhost,127.0.0.1"
-set "RGAA_ALLOWED_HOSTS=%HOSTS%"
-
 %COMPOSE% up -d
 if errorlevel 1 (
     echo Le demarrage a echoue. Lire le message ci-dessus.
@@ -86,45 +79,16 @@ echo  Adresse : http://localhost:38080
 if defined BIND if not "%BIND%"=="127.0.0.1" echo            http://ADRESSE-IP-DE-CETTE-MACHINE:38080 depuis une autre machine
 echo  Jeton   : %TOKEN%
 echo ========================================
-echo.
-echo  Sites autorises : %HOSTS%
-echo  Pour analyser un autre site, ajouter son adresse - une par ligne, sans https:// - dans le fichier :
-echo    %CD%\sites-autorises.txt
-echo  Pour l'ouvrir : notepad "%CD%\sites-autorises.txt"
-echo  Enregistrer, puis relancer ce script.
-echo.
+rem .env cree avant la 1.0.2 : la liste limite encore les sites analysables.
+set "HOSTS="
+for /f "tokens=2 delims==" %%h in ('findstr /b "RGAA_ALLOWED_HOSTS=" .env') do if not defined HOSTS set "HOSTS=%%h"
+if defined HOSTS if not "%HOSTS%"=="*" (
+    echo  Sites limites a : %HOSTS%
+    echo  Pour autoriser tous les sites, supprimer la ligne RGAA_ALLOWED_HOSTS de %CD%\.env, puis relancer ce script.
+)
 echo  Arret : %COMPOSE% down
 echo.
 pause
-exit /b 0
-
-:ajouter_liste
-rem Liste separee par des virgules. Pas de "for %%h in (...)" : il prendrait *.monsite.fr pour des noms de fichiers.
-set "RESTE=%~1"
-:ajouter_liste_suite
-if not defined RESTE exit /b 0
-set "ELEMENT="
-for /f "tokens=1* delims=," %%x in ("%RESTE%") do (
-    set "ELEMENT=%%x"
-    set "RESTE=%%y"
-)
-if not defined ELEMENT exit /b 0
-call :ajouter_site "%ELEMENT%"
-goto ajouter_liste_suite
-
-:ajouter_site
-rem Retire https://, http:// et le chemin, pour accepter une adresse copiee du navigateur ; ignore les doublons.
-set "SITE=%~1"
-set "SITE=%SITE:https://=%"
-set "SITE=%SITE:http://=%"
-for /f "delims=/" %%p in ("%SITE%") do set "SITE=%%p"
-if not defined SITE exit /b 0
-if not defined HOSTS (
-    set "HOSTS=%SITE%"
-    exit /b 0
-)
-echo ,%HOSTS%, | findstr /i /l /c:",%SITE%," >nul && exit /b 0
-set "HOSTS=%HOSTS%,%SITE%"
 exit /b 0
 
 :creer_env

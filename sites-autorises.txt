@@ -1,8 +1,0 @@
-# Sites que RGAA Helper a le droit d'analyser : un par ligne, sans https://.
-# « *.monsite.fr » autorise monsite.fr et tous ses sous-domaines.
-# Les lignes qui commencent par # sont ignorées.
-# Après modification : enregistrer ce fichier, puis relancer start.sh (macOS, Linux) ou start.bat (Windows).
-
-localhost
-127.0.0.1
-accessibilite.numerique.gouv.fr

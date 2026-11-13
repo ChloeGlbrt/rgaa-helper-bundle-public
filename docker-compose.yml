@@ -4,7 +4,8 @@ services:
     pull_policy: always
     environment:
       RGAA_API_TOKENS: ${RGAA_API_TOKENS:?Lancer start.bat ou start.sh pour creer le fichier .env}
-      RGAA_ALLOWED_HOSTS: ${RGAA_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      # Tous les sites par défaut ; une liste dans .env pour restreindre (voir .env.example).
+      RGAA_ALLOWED_HOSTS: ${RGAA_ALLOWED_HOSTS:-*}
       SPRING_PROFILES_ACTIVE: local
     ports:
       # Par défaut, accessible depuis cet ordinateur uniquement (RGAA_BIND_ADDRESS dans .env pour changer).
