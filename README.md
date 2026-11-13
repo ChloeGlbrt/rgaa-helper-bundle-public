@@ -59,6 +59,6 @@ commande d'arrêt à utiliser.
 ## Usage responsable
 
 N'analyser que des sites que l'on est autorisé à tester. L'outil ne remplace pas un audit RGAA complet.
-Fourni tel quel, sans garantie. Projet indépendant, non officiel, sans lien avec la DINUM.
+Fourni tel quel, sans garantie. Projet indépendant, non officiel.
 
 © ChloeGlbrt, tous droits réservés.
